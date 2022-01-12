@@ -18,6 +18,14 @@ class LibraryTest {
         assertEquals("FIZZBUZZFIZZFIZZBUZZFIZZ", fizzbuzz(0..12))
     }
 
+    // my tests
+    @Test fun fizzbuzzToOne() {
+        assertEquals("", fizzbuzz(0..1))
+    }
+    @Test fun fizzbuzzFourTwelve() {
+        assertEquals("BUZZFIZZFIZZBUZZFIZZ", fizzbuzz(4..12))
+    }
+
     @Test fun r1Test() {
         assertEquals(">>> FOO: {BAR}", r1())
     }

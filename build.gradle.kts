@@ -31,3 +31,10 @@ dependencies {
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
+
+// Used to show stdout/stderror while testing
+tasks.withType<Test> {
+    this.testLogging {
+        this.showStandardStreams = true
+    }
+}

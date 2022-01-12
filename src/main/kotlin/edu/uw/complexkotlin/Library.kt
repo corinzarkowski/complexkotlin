@@ -15,7 +15,13 @@ class Library {
 // the final string should look like FIZZBUZZFIZZFIZZBUZZFIZZFIZZBUZZ for 0..15.
 // store this lambda into 'fizzbuzz' so that the tests can call it
 //
-val fizzbuzz : (IntRange) -> String = { _ -> "" }
+val fizzbuzz : (IntRange) -> String = { list: IntRange -> list.map { 
+        if ( it % 3 == 0 && it % 5 == 0 && it > 0) "FIZZBUZZ" 
+        else if (it % 3 == 0 && it > 0) "FIZZ" 
+        else if ( it % 5 == 0 && it > 0) "BUZZ" 
+        else "" } 
+    .fold("") { total, cur -> total + cur } 
+}
 
 // Example usage
 /*
@@ -40,19 +46,44 @@ fun process(message: String, block: (String) -> String): String {
     return ">>> ${message}: {" + block(message) + "}"
 }
 // Create r1 as a lambda that calls process() with message "FOO" and a block that returns "BAR"
-val r1 = { "" }
+val r1 : () -> String = { process("FOO", { "BAR" } ) }
 
 // Create r2 as a lambda that calls process() with message "FOO" and a block that upper-cases 
 // r2_message, and repeats it three times with no spaces: "WOOGAWOOGAWOOGA"
 val r2_message = "wooga"
-val r2 = { "" }
+val r2 : () -> String = { process("FOO", { (r2_message.repeat(3)).toUpperCase() } ) }
 
 
 // write an enum-based state machine between talking and thinking
-enum class Philosopher { }
+enum class Philosopher {
+    // i love seneca! he is usually associated with stoicism, and my favorite of his writings is his letter
+    // to lucilius regarding travel! in this, he muses that travel can only provide temporary satisfaction if one's issues stem
+    // from themself--travel in itself is not bad, but it is not the escape many perceive it as. it kinda aligns with general stoicism 
+    // in that travel is generally an extraneous activity, and one should strive primarily for internal virtue.
+
+    THINKING {
+        override fun signal() = TALKING
+        override fun toString(): String {
+            return "Deep thoughts...."
+        }
+    },
+
+    TALKING {
+        override fun signal() = THINKING
+        override fun toString(): String {
+            return "Allow me to suggest an idea..."
+        }
+    };
+
+    abstract fun signal(): Philosopher
+}
 
 // create an class "Command" that can be used as a function (provide an "invoke()" function)
 // that takes a single parameter ("message" of type String)
 // primary constructor should take a String argument ("prompt")
 // when invoked, the Command object should return a String containing the prompt and then the message
-class Command(val prompt: String) { }
+class Command(val prompt: String) {
+    operator fun invoke(message: String): String {
+        return this.prompt + message
+    }
+}
